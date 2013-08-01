@@ -105,10 +105,10 @@ class GithubWebhookHandler(tornado.web.RequestHandler):
             logging.info("Deploy cgt project.")
             pr = subprocess.Popen(
                 ['/usr/bin/git', 'pull'],
-                cwd=os.path.dirname('/srv/www/cgt/src'),
+                cwd='/srv/www/cgt/src',
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                shell=True)
+                shell=False)
 
             output, error = pr.communicate()
             if error:
