@@ -115,6 +115,11 @@ class GithubWebhookHandler(tornado.web.RequestHandler):
                 logging.error(error)
             logging.info(output)
 
+            subprocess.Popen(
+                ['/usr/bin/supervisorctl', 'restart', 'cgt'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                shell=False)
 
 
 application = tornado.wsgi.WSGIApplication([
