@@ -63,6 +63,8 @@ from tornado.escape import json_decode
 
 from netaddr import all_matching_cidrs
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 define("port", default=3000, help="run on the given port", type=int)
 define("debug", default=False, help="debug mode", type=bool)
@@ -99,13 +101,13 @@ class GithubWebhookHandler(tornado.web.RequestHandler):
         # hard coded deploy
         repo_name = payload['repository']['name']
         branch = payload['ref'].split('/')[-1]
+        script_file = os.path.join(ROOT_DIR, 'deploy.sh')
 
         if branch == 'master' and repo_name == 'cgt':
             # git pull
             logging.info("Deploy cgt project.")
             pr = subprocess.Popen(
-                ['/usr/bin/git', 'pull'],
-                cwd='/srv/www/cgt/src',
+                ['/bin/sh', script_file],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 shell=False)
@@ -114,12 +116,6 @@ class GithubWebhookHandler(tornado.web.RequestHandler):
             if error:
                 logging.error(error)
             logging.info(output)
-
-            subprocess.Popen(
-                ['/usr/bin/supervisorctl', 'restart', 'cgt'],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                shell=False)
 
 
 application = tornado.wsgi.WSGIApplication([
