@@ -43,7 +43,7 @@ def staging():
 
 
 @task
-def prodution():
+def production():
     env.user = 'root'
 
     #  name of your project - no spaces, no special chars
