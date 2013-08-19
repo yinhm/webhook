@@ -5,4 +5,4 @@ cd /srv/www/cgt/src
 /usr/bin/supervisorctl restart cgt
 # source are csh-ism
 . /srv/www/envs/cgt/bin/activate
-python manage.py collectstatic --noinput --settings=cgt.production
+python manage.py collectstatic --noinput --settings=settings.prod
