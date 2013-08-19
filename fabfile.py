@@ -10,7 +10,7 @@ from fagungis.tasks import *
 
 
 @task
-def webhook():
+def staging():
     env.user = 'root'
 
     #  name of your project - no spaces, no special chars
@@ -40,4 +40,38 @@ def webhook():
 
     env.nginx_server_name = 'deploy.caigengtan.com'
     env.nginx_client_max_body_size = 2
+
+
+@task
+def prodution():
+    env.user = 'root'
+
+    #  name of your project - no spaces, no special chars
+    env.project = 'webhook'
+    #  hg repository of your project
+    env.repository = 'https://github.com/yinhm/webhook.git'
+    #  type of repository (git or hg)
+    env.repository_type = 'git'
+    #  hosts to deploy your project, users must be sudoers
+    env.hosts = ['cgt', ]
+    # additional packages to be installed on the server
+    env.additional_packages = [
+        #'mercurial',
+    ]
+
+    expand_config(env)
+
+    # default to root user for deployment,
+    # may need to change to a sudo user to enhance security.
+    env.runner_user = 'root'
+    env.runner_group = 'root'
+
+    env.gunicorn_bind = "127.0.0.1:3000"
+    env.gunicorn_workers = 1
+    env.gunicorn_worker_class = "tornado"
+    env.gunicorn_loglevel = "debug"
+
+    env.nginx_server_name = 'deploy.caigengtan.com'
+    env.nginx_client_max_body_size = 2
+
 
